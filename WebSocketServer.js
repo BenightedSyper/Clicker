@@ -13,9 +13,7 @@ wss.on("connection", function(_sock) {
 	SOCKETS[_sock.id] = _sock;
 	_sock.send("Connected to Server. ID : " + _sock.id);
 	
-	wss.clients.forEach(function(_client){
-		_client.send("current connections: " + CurrentConnections);
-	});
+	ServerBroadcast("current connections: " + CurrentConnections);
 	
 	_sock.on('message', function (_data) {
 		console.log('received: %s', _data);
@@ -23,6 +21,12 @@ wss.on("connection", function(_sock) {
 	
 	_sock.on('close', function (_data) {
 		CurrentConnections--;
-		console.log('disconnected: %s', _sock.id);
+		console.log('Client %s has Disconnected.', _sock.id);
 	});
 });
+
+function ServerBroadcast(_message){
+	wss.clients.forEach(function(_client){
+		_client.send(_message);
+	});
+};

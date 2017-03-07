@@ -1,0 +1,26 @@
+#UserNameForm {
+    background-color: lightblue;
+}
+body {
+	margin:0px auto;
+	padding:0;
+	background: #222;
+	font-family: 'Oxygen', 'sans-serif';
+	font-size: 1.0em;
+	color:#555;
+}
+* {
+	margin:0;
+	padding:0;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+p {
+    font-family: verdana;
+    font-size: 20px;
+	text-align: center;
+}
