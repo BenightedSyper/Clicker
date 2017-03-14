@@ -2,6 +2,7 @@
 <html>
   <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://blueimp.github.io/JavaScript-MD5/js/md5.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <title>Web Socket Server Test</title>
     <style>
@@ -11,123 +12,25 @@
   <body onload="">
 	<div id="LogInDiv">
 		User name:<br>
-		<input type="text" name="username"><br>
+		<input type="text" name="usernameLogIn"><br>
 		User password:<br>
-		<input type="password" name="password"><br>
+		<input type="password" name="passwordLogIn"><br>
 		<button type="button" id="LogInSubmit">Submit</button>
 		<button type="button" id="LogInToggle">Sign Up</button>
 	</div>
 	<div id="SignUpDiv">
 		User name:<br>
-		<input type="text" name="username"><br>
+		<input type="text" name="usernameSignUp"><br>
 		Email:<br>
-		<input type="text" name="email"><br>
+		<input type="text" name="emailSignUp"><br>
 		Password:<br>
-		<input type="password" name="password"><br>
+		<input type="password" name="passwordSignUp"><br>
 		Confirm Password:<br>
-		<input type="password" name="passwordConfirm"><br>
+		<input type="password" name="passwordConfirmSignUp"><br>
 		<button type="button" id="SignUpSubmit">Submit</button>
 		<button type="button" id="SignUpToggle">Log In</button>
 	</div>
     <div id="content"></div>
-	
-	<script type="text/javascript">
-		var content = document.getElementById('content');
-		var socket = new WebSocket('ws://localhost:1337');
-		
-		
-		
-		socket.onopen = function () {
-		var message = 'hello from the client';
-			socket.send(JSON.stringify(message));
-		};
-
-		socket.onmessage = function (message) {
-			content.innerHTML += message.data +'<br />';
-		};
-
-		socket.onerror = function (error) {
-			console.log('WebSocket error: ' + error);
-		};
-		
-		socket.onclose = function (){
-			content.innerHTML += "DISCONNECTED" +'<br />';
-		};
-		$(document).on('click', '#LogInToggle', function(){
-			//console.log("LogInToggle clicked");
-			$("div[id=LogInDiv]").toggle();
-			$("div[id=SignUpDiv]").toggle();
-		});
-		$(document).on('click', '#SignUpToggle', function(){
-			//console.log("LogInToggle clicked");
-			$("div[id=LogInDiv]").toggle();
-			$("div[id=SignUpDiv]").toggle();
-		});
-		$(document).on('click', '#LogInSubmit', function(){
-			var un = $('input[name=username]')[0].value;
-			var em = $('input[name=email]')[0].value;
-			var pw = $('input[name=password]')[0].value;
-			var pwc = $('input[name=passwordConfirm]')[0].value;
-			if(un != "" && pw != ""){
-				var packet = { message:"Login", data:{user:un, pass:pw} };
-				socket.send( JSON.stringify(packet) );
-			}else{
-				if(un == ""){
-					alert("Input a User Name.");
-				}else{
-					alert("Input a Password.");
-				}
-			}
-		});
-		$(document).ready(function(){
-			console.log("document is ready!");
-			$("div[id=SignUpDiv]").toggle();
-		});
-		
-		function SignUpSubmit(){
-			var un = $('input[name=username]')[0].value;
-			var em = $('input[name=email]')[0].value;
-			var pw = $('input[name=password]')[0].value;
-			var pwc = $('input[name=passwordConfirm]')[0].value;
-			if(un != "" && pw != ""){
-				var packet = { message:"Login", data:{user:un, pass:pw} };
-				socket.send( JSON.stringify(packet) );
-			}else{
-				if(un == ""){
-					alert("Input a User Name.");
-				}else{
-					alert("Input a Password.");
-				}
-			}
-		};
-		function LogInSubmit(){
-			var un = $('input[name=username]')[0].value;
-			var pw = $('input[name=password]')[0].value;
-			if(un != "" && pw != ""){
-				var packet = { message:"Login", data:{user:un, pass:pw} };
-				socket.send( JSON.stringify(packet) );
-			}else{
-				if(un == ""){
-					alert("Input a User Name.");
-				}else{
-					alert("Input a Password.");
-				}
-			}
-		};
-		function test(){
-			var un = $('input[name=username]')[0].value;
-			var pw = $('input[name=password]')[0].value;
-			if(un != "" && pw != ""){
-				var packet = { message:"Login", data:{user:un, pass:pw} };
-				socket.send( JSON.stringify(packet) );
-			}else{
-				if(un == ""){
-					alert("Input a User Name.");
-				}else{
-					alert("Input a Password.");
-				}
-			}
-		};
-	</script>
+	<script type="text/javascript" src="ClickerApp.js"></script>
   </body>
 </html>
