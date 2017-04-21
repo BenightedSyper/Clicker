@@ -35,6 +35,7 @@ $(document).on('click', '#SignUpSubmit', function(){
 			alert("Passwords do not match.");
 		}else{
 			var packet = { message:"SignUp", data:{user:un, pass:md5(pw), email: em} };
+			console.log(packet);
 			socket.send( JSON.stringify(packet) );
 		}
 	}else{
@@ -55,8 +56,16 @@ $(document).ready(function(){
 		var message = 'hello from the client';
 		socket.send(JSON.stringify(message));
 	};
-	socket.onmessage = function (message) {
-		content.innerHTML += message.data +'<br />';
+	socket.onmessage = function (_pack) {
+		var packet = JSON.parse(_pack);
+		switch(packet.message){
+			case "connection":
+				handleConnection(packet);
+				break;
+			default:
+				break;
+		};
+		content.innerHTML += packet.data +'<br />';
 	};
 	socket.onerror = function (error) {
 		console.log('WebSocket error: ' + error);
@@ -65,6 +74,19 @@ $(document).ready(function(){
 		content.innerHTML += "DISCONNECTED" +'<br />';
 	};
 });
+
+function handleConnection(_pack){
+	switch(_pack.answer){
+		case true:
+			alert("Sign up successful");
+			break;
+		case false:
+			alert("Sign Up Failed: " + _pack.reason);
+			break;
+		default:
+			break;
+	}
+}
 
 function SignUpSubmit(){
 	var un = $('input[name=username]')[0].value;

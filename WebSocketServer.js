@@ -17,6 +17,7 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
+
 /*
 connection.query('SELECT * FROM users', function (error, results, fields) {
   if (error) throw error;
@@ -45,9 +46,12 @@ wss.on("connection", function(_sock) {
 			case "SignUp":
 				console.log('New User with username %s and email %s with a hash %s', pack.data.user, pack.data.email, pack.data.pass);
 				var res = signUpUser(pack.data.user, pack.data.email, pack.data.pass);
+				_sock.send(JSON.strigify(res));
+				break;
+			default:
+				console.log('received: %s', _pack);
 				break;
 		}
-		console.log('received: %s', _pack);
 	});
 	
 	_sock.on('close', function (_data) {
@@ -60,17 +64,20 @@ function logInUser(_un, _pw){
 		if (error) throw error;
 		console.log(results[0]);
 		if(results[0].password == _pw){
-			return { answer:true, reason:correct };
+			return { message:"connection", answer:true, reason:correct };
 		}
 	});
-	return { answer:false, reason:unknown };
+	return { message:"connection", answer:false, reason:unknown };
 };
 function signUpUser(_un, _em, _pw){
-	connection.query('INSERT INTO users (username, emailaddress, password) VALUES',[_un, _em, _pw], function (error, results, fields) {
-		if (error) throw error;
-		console.log(results);
+	connection.query('INSERT INTO users SET ?',{username:_un, emailaddress:_em, password:_pw}, function (error, results, fields) {
+		console.log(error + " " + results + " " + fields);
+		if(error != undefined){
+			return { message:"connection", answer:false, reason:error };
+		}
 	});
-	return { answer:false, reason:unknown };
+	//connection.end();
+	return { message:"connection", answer:false, reason:"unknown" };
 };
 function ServerBroadcast(_message){
 	wss.clients.forEach(function(_client){
